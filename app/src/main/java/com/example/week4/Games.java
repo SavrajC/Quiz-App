@@ -1,6 +1,7 @@
 package com.example.week4;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,11 +29,16 @@ public class Games extends AppCompatActivity {
     private static final String API_URL = "https://api.api-ninjas.com/v1/trivia?category=toysgames&limit=10";
     private static final String TAG = com.example.week4.MainActivity.class.getSimpleName();
     private List<TriviaQuestion> triviaQuestions;
-    private TextView questionTextView;
+    private TextView questionTextView,correct_score_text_view,incorrect_score_text_view;
     private EditText answerEditText;
     private Button checkAnswerButton;
     private TextView correctnessTextView;
     private int currentQuestionIndex;
+    private SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "TriviaScores";
+    private static final String CORRECT_SCORE_GAMES = "correctScoreGames";
+    private static final String INCORRECT_SCORE_GAMES = "incorrectScoreGames";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,12 @@ public class Games extends AppCompatActivity {
         answerEditText = findViewById(R.id.answer_edit_text);
         checkAnswerButton = findViewById(R.id.check_answer_button);
         correctnessTextView = findViewById(R.id.correctness_text_view);
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        correct_score_text_view = findViewById(R.id.correct_score_text_view);
+        incorrect_score_text_view = findViewById(R.id.incorrect_score_text_view);
+
+
+
 
         checkAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +96,16 @@ public class Games extends AppCompatActivity {
         }
     }
     private void displayTriviaQuestion() {
+        // Get the scores from SharedPreferences
+        int correctScore = sharedPreferences.getInt(CORRECT_SCORE_GAMES, 0);
+        int incorrectScore = sharedPreferences.getInt(INCORRECT_SCORE_GAMES, 0);
+
+        // Update the UI with the scores
+        TextView correctScoreTextView = findViewById(R.id.correct_score_text_view);
+        TextView incorrectScoreTextView = findViewById(R.id.incorrect_score_text_view);
+        correctScoreTextView.setText("Correct: " + correctScore);
+        incorrectScoreTextView.setText("Incorrect: " + incorrectScore);
+
         currentQuestionIndex++;
         if (currentQuestionIndex >= triviaQuestions.size()) {
             currentQuestionIndex = 0;
@@ -94,14 +116,23 @@ public class Games extends AppCompatActivity {
     }
 
 
+
     private void checkAnswer() {
         String answer = answerEditText.getText().toString();
         TriviaQuestion triviaQuestion = triviaQuestions.get(currentQuestionIndex);
 
         if (answer.equalsIgnoreCase(triviaQuestion.getAnswer())) {
             correctnessTextView.setText("Correct!");
+            // Update the correct score and save it to SharedPreferences
+            int correctScore = sharedPreferences.getInt(CORRECT_SCORE_GAMES, 0);
+            correctScore++;
+            sharedPreferences.edit().putInt(CORRECT_SCORE_GAMES, correctScore).apply();
         } else {
             correctnessTextView.setText("Incorrect. The correct answer was: " + triviaQuestion.getAnswer());
+            // Update the incorrect score and save it to SharedPreferences
+            int incorrectScore = sharedPreferences.getInt(INCORRECT_SCORE_GAMES, 0);
+            incorrectScore++;
+            sharedPreferences.edit().putInt(INCORRECT_SCORE_GAMES, incorrectScore).apply();
         }
 
         // Call displayTriviaQuestion() again to show the next question

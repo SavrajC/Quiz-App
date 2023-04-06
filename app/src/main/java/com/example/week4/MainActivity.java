@@ -1,8 +1,10 @@
 package com.example.week4;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,16 +19,129 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
+    private TextView correctScoreSportsTextView;
+    private TextView incorrectScoreSportsTextView;
+    private TextView correctScoreMusicTextView;
+    private TextView incorrectScoreMusicTextView;
+    private TextView correctScoreGamesTextView;
+    private TextView incorrectScoreGamesTextView;
 
-    @Override
+    private SharedPreferences sharedPreferences;
+//     int correctScoreSports;
+//    int incorrectScoreSports;
+//     int correctScoreMusic;
+//     int incorrectScoreMusic;
+//   int correctScoreGames;
+//    int incorrectScoreGames;
+    private static final String PREFS_NAME = "TriviaScores";
+    private static final String CORRECT_SCORE_MUSIC = "correctScoreMusic";
+    private static final String INCORRECT_SCORE_MUSIC = "incorrectScoreMusic";
+    private static final String CORRECT_SCORE_SPORTS = "correctScoreSports";
+    private static final String INCORRECT_SCORE_SPORTS = "incorrectScoreSports";
+    private static final String CORRECT_SCORE_GAMES = "correctScoreGames";
+    private static final String INCORRECT_SCORE_GAMES = "incorrectScoreGames";
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        correctScoreSportsTextView = findViewById(R.id.correct_score_sports);
+        incorrectScoreSportsTextView = findViewById(R.id.incorrect_score_sports);
+        correctScoreMusicTextView = findViewById(R.id.correct_score_music);
+        incorrectScoreMusicTextView = findViewById(R.id.incorrect_score_music);
+        correctScoreGamesTextView = findViewById(R.id.correct_score_games);
+        incorrectScoreGamesTextView = findViewById(R.id.incorrect_score_games);
+
+        // Get the shared preferences
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int correctScoreSports = sharedPreferences.getInt(CORRECT_SCORE_SPORTS, 0);
+        int incorrectScoreSports = sharedPreferences.getInt(INCORRECT_SCORE_SPORTS, 0);
+
+        // Get the values for the sports quiz
+//        correctScoreSports = sharedPreferences.getInt("correctScoreSports", 0);
+//        incorrectScoreSports = sharedPreferences.getInt("incorrectScoreSports", 0);
+        System.out.println(correctScoreSports);
+        System.out.println(incorrectScoreSports);
+
+        // Update the TextViews for the sports quiz
+        correctScoreSportsTextView.setText("Correct: " + correctScoreSports);
+        incorrectScoreSportsTextView.setText("Incorrect: " + incorrectScoreSports);
+
+        // Get the values for the music quiz
+        int correctScoreMusic = sharedPreferences.getInt("correctScoreMusic", 0);
+        int incorrectScoreMusic = sharedPreferences.getInt("incorrectScoreMusic", 0);
+
+
+        // Update the TextViews for the music quiz
+        correctScoreMusicTextView.setText("Correct: " + correctScoreMusic);
+        incorrectScoreMusicTextView.setText("Incorrect: " + incorrectScoreMusic);
+
+        // Get the values for the games quiz
+        int correctScoreGames = sharedPreferences.getInt("correctScoreGames", 0);
+        int incorrectScoreGames = sharedPreferences.getInt("incorrectScoreGames", 0);
+
+        // Update the TextViews for the games quiz
+        correctScoreGamesTextView.setText("Correct: " + correctScoreGames);
+        incorrectScoreGamesTextView.setText("Incorrect: " + incorrectScoreGames);
+
+        int totalCorrect = correctScoreGames + correctScoreMusic + correctScoreSports;
+        int totalIncorrect = incorrectScoreGames + incorrectScoreMusic + incorrectScoreSports;
+
+        System.out.println(totalCorrect);
+        System.out.println(totalIncorrect);
+
+//        Log.d("MainActivity", "Correct score for sports quiz: " + correctScoreSports);
+//        Log.d("MainActivity", "Incorrect score for sports quiz: " + incorrectScoreSports);
+//
+//        Log.d("MainActivity", "Correct score for music quiz: " + correctScoreMusic);
+//        Log.d("MainActivity", "Incorrect score for music quiz: " + incorrectScoreMusic);
+//
+//        Log.d("MainActivity", "Correct score for games quiz: " + correctScoreGames);
+//        Log.d("MainActivity", "Incorrect score for games quiz: " + incorrectScoreGames);
+//
+//        Log.d("MainActivity", "Sports quiz scores updated. Correct: " + correctScoreSports + ", Incorrect: " + incorrectScoreSports);
+//
+//        Log.d("MainActivity", "Music quiz scores updated. Correct: " + correctScoreMusic + ", Incorrect: " + incorrectScoreMusic);
+//
+//        Log.d("MainActivity", "Games quiz scores updated. Correct: " + correctScoreGames + ", Incorrect: " + incorrectScoreGames);
+
+
     }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // Get the shared preferences
+//        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//
+//        // Get the values for the sports quiz
+//        int correctScoreSports = sharedPreferences.getInt("correctScoreSports", 0);
+//        int incorrectScoreSports = sharedPreferences.getInt("incorrectScoreSports", 0);
+//
+//        // Update the TextViews for the sports quiz
+//        correctScoreSportsTextView.setText("Correct: " + correctScoreSports);
+//        incorrectScoreSportsTextView.setText("Incorrect: " + incorrectScoreSports);
+//
+//        // Get the values for the music quiz
+//        int correctScoreMusic = sharedPreferences.getInt("correctScoreMusic", 0);
+//        int incorrectScoreMusic = sharedPreferences.getInt("incorrectScoreMusic", 0);
+//
+//        // Update the TextViews for the music quiz
+//        correctScoreMusicTextView.setText("Correct: " + correctScoreMusic);
+//        incorrectScoreMusicTextView.setText("Incorrect: " + incorrectScoreMusic);
+//
+//        // Get the values for the games quiz
+//        correctScoreGames = sharedPreferences.getInt("correctScoreGames", 0);
+//        incorrectScoreGames = sharedPreferences.getInt("incorrectScoreGames", 0);
+//
+//        // Update the TextViews for the games quiz
+//        correctScoreGamesTextView.setText("Correct: " + correctScoreGames);
+//        incorrectScoreGamesTextView.setText("Incorrect: " + incorrectScoreGames);
+//    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -56,34 +171,6 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-//        menuSpinner = findViewById(R.id.menu_spinner);
-//        goButton = findViewById(R.id.go_button);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"Games", "Music", "Sports"});
-//        menuSpinner.setAdapter(adapter);
-//        goButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String selectedActivity = (String) menuSpinner.getSelectedItem();
-//                Intent intent;
-//                switch (selectedActivity) {
-//                    case "Games":
-//                        intent = new Intent(MainActivity.this, Games.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Music":
-//                        intent = new Intent(MainActivity.this, Music.class);
-//                        startActivity(intent);
-//                        break;
-//                    case "Sports":
-//                        intent = new Intent(MainActivity.this, Sports.class);
-//                        startActivity(intent);
-//                        break;
-//                }
-//            }
-//        });
-//    }
-
-
     }
 }
 

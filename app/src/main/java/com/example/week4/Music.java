@@ -1,6 +1,7 @@
 package com.example.week4;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,11 +33,17 @@ public class Music extends AppCompatActivity {
     private Button checkAnswerButton;
     private TextView correctnessTextView;
     private int currentQuestionIndex;
+    private SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "TriviaScores";
+    private static final String CORRECT_SCORE_MUSIC = "correctScoreMusic";
+    private static final String INCORRECT_SCORE_MUSIC = "incorrectScoreMusic";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music);
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         questionTextView = findViewById(R.id.question_text_view);
         answerEditText = findViewById(R.id.answer_edit_text);
@@ -85,6 +92,16 @@ public class Music extends AppCompatActivity {
     }
 
     private void displayTriviaQuestion() {
+        // Get the scores from SharedPreferences
+        int correctScore = sharedPreferences.getInt(CORRECT_SCORE_MUSIC, 0);
+        int incorrectScore = sharedPreferences.getInt(INCORRECT_SCORE_MUSIC, 0);
+
+        // Update the UI with the scores
+        TextView correctScoreTextView = findViewById(R.id.correct_score_text_view);
+        TextView incorrectScoreTextView = findViewById(R.id.incorrect_score_text_view);
+        correctScoreTextView.setText("Correct: " + correctScore);
+        incorrectScoreTextView.setText("Incorrect: " + incorrectScore);
+
         currentQuestionIndex++;
         if (currentQuestionIndex >= triviaQuestions.size()) {
             currentQuestionIndex = 0;
@@ -103,13 +120,22 @@ public class Music extends AppCompatActivity {
 
         if (answer.equalsIgnoreCase(triviaQuestion.getAnswer())) {
             correctnessTextView.setText("Correct!");
+            // Update the correct score and save it to SharedPreferences
+            int correctScore = sharedPreferences.getInt(CORRECT_SCORE_MUSIC, 0);
+            correctScore++;
+            sharedPreferences.edit().putInt(CORRECT_SCORE_MUSIC, correctScore).apply();
         } else {
             correctnessTextView.setText("Incorrect. The correct answer was: " + triviaQuestion.getAnswer());
+            // Update the incorrect score and save it to SharedPreferences
+            int incorrectScore = sharedPreferences.getInt(INCORRECT_SCORE_MUSIC, 0);
+            incorrectScore++;
+            sharedPreferences.edit().putInt(INCORRECT_SCORE_MUSIC, incorrectScore).apply();
         }
 
         // Call displayTriviaQuestion() again to show the next question
         displayTriviaQuestion();
     }
+
 
 
 
