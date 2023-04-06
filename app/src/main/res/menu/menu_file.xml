@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itMain"
+        android:title="Main" />
+    <item
+        android:id="@+id/itMusic"
+        android:title="Music" />
+    <item
+        android:id="@+id/itGame"
+        android:title="Game" />
+    <item
+        android:id="@+id/itSports"
+        android:title="Sports" />
+</menu>
